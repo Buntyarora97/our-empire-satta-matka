@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Our Empire Admin Panel"
+version = "1.0.0"
+id = "artifacts/admin-panel"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 5173
+
+[services.development]
+run = "node /home/runner/workspace/artifacts/admin-panel/node_modules/vite/bin/vite.js --config /home/runner/workspace/artifacts/admin-panel/vite.config.ts --host 0.0.0.0"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/admin-panel", "run", "build" ]
+publicDir = "artifacts/admin-panel/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "5173"
+BASE_PATH = "/"

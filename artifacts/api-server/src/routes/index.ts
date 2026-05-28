@@ -1,8 +1,38 @@
 import { Router, type IRouter } from "express";
-import healthRouter from "./health";
+import healthRouter from "./health.js";
+import authRouter from "./auth.js";
+import userRouter from "./user.js";
+import marketsRouter from "./markets.js";
+import betsRouter from "./bets.js";
+import walletRouter from "./wallet.js";
+import resultsRouter from "./results.js";
+import adminAuthRouter from "./admin-auth.js";
+import adminUsersRouter from "./admin-users.js";
+import adminBetsRouter from "./admin-bets.js";
+import adminResultsRouter from "./admin-results.js";
+import adminTransactionsRouter from "./admin-transactions.js";
+import adminMarketsRouter from "./admin-markets.js";
+import adminAnalyticsRouter from "./admin-analytics.js";
+import adminNotificationsRouter from "./admin-notifications.js";
+import adminSettingsRouter from "./admin-settings.js";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(authRouter);
+router.use(userRouter);
+router.use(marketsRouter);
+router.use(betsRouter);
+router.use(walletRouter);
+router.use(resultsRouter);
+router.use(adminAuthRouter);
+router.use(adminUsersRouter);
+router.use(adminBetsRouter);
+router.use(adminResultsRouter);
+router.use(adminTransactionsRouter);
+router.use(adminMarketsRouter);
+router.use(adminAnalyticsRouter);
+router.use(adminNotificationsRouter);
+router.use(adminSettingsRouter);
 
 export default router;
