@@ -1,44 +1,68 @@
-# [Project name]
+# Our Empire - Satta Matka
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A complete Satta Matka betting platform with Android mobile app, admin panel, and REST API backend.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
+- API server runs automatically on port 8080 via workflow
+- Admin panel runs automatically on port 5173 via workflow
+- Mobile app (Expo) runs automatically via workflow
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- Required env: `DATABASE_URL` — Postgres connection string (already set)
+
+## Credentials
+
+- Admin panel login: `ourempire` / `Ourempire@#000#@`
+- Admin panel URL: preview pane at `/`
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- API: Express 5 (artifacts/api-server) — serves on /api
+- DB: PostgreSQL (Neon) — raw SQL via pg Pool
+- Mobile: Expo + React Native (artifacts/mobile)
+- Admin Panel: Vite + React + Tailwind + shadcn/ui (artifacts/admin-panel)
+- API client: Orval-generated hooks in lib/api-client-react
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/api-server/src/routes/` — all API route handlers (auth, bets, markets, wallet, admin-*)
+- `artifacts/mobile/app/` — Expo Router screens
+- `artifacts/mobile/context/AuthContext.tsx` — mobile auth state + token storage
+- `artifacts/admin-panel/src/pages/` — admin panel pages
+- `artifacts/admin-panel/src/components/layout/admin-layout.tsx` — sidebar layout
+- `lib/api-client-react/` — generated React Query hooks used by both admin and mobile
+- Database tables: users, markets, bets, results, transactions, upi_accounts, app_settings, admin_users, notifications, user_notifications, activity_logs
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- API uses raw SQL (pg Pool) rather than Drizzle ORM queries — avoids schema file mismatch issues
+- Admin panel sets auth token in localStorage and passes via `setAuthTokenGetter` in App.tsx
+- Mobile app sets API base URL from `EXPO_PUBLIC_DOMAIN` env var
+- Bet types supported: jantri, open, crossing, no-to-no, single, jodi, panna
+- Markets are seeded with 11 standard Satta Matka markets (DISAWAR, STAR DAY, etc.)
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Users register with phone + password, get a referral code
+- Users can place bets on markets (Jantri / Open / Crossing / No-To-No game types)
+- Users can deposit via UPI and withdraw to bank/UPI
+- Admin can manage users, markets, results, deposits/withdrawals, send notifications
+- Results declared by admin automatically settle winning bets and credit winnings
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Color palette: Deep Forest Green (#1a4718), Forest Green (#48723e), Sage Green (#83a561), Light Lime (#bfdb81), Pale Yellow (#eae69e) on near-black background
+- Build APK using Expo in Replit shell: `cd artifacts/mobile && npx expo build:android` or `eas build -p android`
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Database tables were created with raw SQL (not drizzle push) — the lib/db/src/schema/index.ts is intentionally empty
+- Admin token stored in localStorage as "adminToken"; user token in AsyncStorage as "ourempire_token"
+- Always run `pnpm install --no-frozen-lockfile` after adding new packages
+- The API server must be running before admin panel API calls work
+- bets.game_type CHECK constraint includes: jantri, open, crossing, no-to-no, single, jodi, panna
+- transactions.method column allows NULL (for admin adjustments)
 
 ## Pointers
 
