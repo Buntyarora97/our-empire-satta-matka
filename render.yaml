@@ -3,7 +3,7 @@ services:
     name: our-empire-satta-matka
     runtime: node
     plan: free
-    buildCommand: npm install -g pnpm && pnpm install --no-frozen-lockfile && pnpm approve-builds --yes && BASE_PATH=/ PORT=3000 pnpm --filter @workspace/admin-panel run build && pnpm --filter @workspace/api-server run build
+    buildCommand: corepack enable && corepack prepare pnpm@latest --activate && pnpm install --no-frozen-lockfile && pnpm approve-builds --yes && BASE_PATH=/ PORT=3000 pnpm --filter @workspace/admin-panel run build && pnpm --filter @workspace/api-server run build
     startCommand: node --enable-source-maps ./artifacts/api-server/dist/index.mjs
     envVars:
       - key: NODE_ENV
@@ -14,3 +14,5 @@ services:
         sync: false
       - key: LOG_LEVEL
         value: info
+      - key: GIT_LFS_SKIP_SMUDGE
+        value: "1"
