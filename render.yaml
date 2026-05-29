@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: our-empire-satta-matka
+    runtime: node
+    plan: free
+    buildCommand: npm install -g pnpm && pnpm install --no-frozen-lockfile && pnpm approve-builds --yes && BASE_PATH=/ PORT=3000 pnpm --filter @workspace/admin-panel run build && pnpm --filter @workspace/api-server run build
+    startCommand: node --enable-source-maps ./artifacts/api-server/dist/index.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: LOG_LEVEL
+        value: info
