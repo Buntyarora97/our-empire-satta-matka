@@ -12,8 +12,9 @@ A complete Satta Matka betting platform with Android mobile app, admin panel, an
 
 ## Credentials
 
-- Admin panel login: `ourempire` / `Ourempire@#000#@`
-- Admin panel URL: preview pane at `/`
+- Admin panel login: `admin` / `Admin@123`  (or `ourempire` / `Ourempire@#000#@`)
+- Admin panel URL: preview pane at `/` (served by API server)
+- Demo app user: phone `9876543210`, password `Test@1234`
 
 ## Stack
 
@@ -40,7 +41,9 @@ A complete Satta Matka betting platform with Android mobile app, admin panel, an
 - Admin panel sets auth token in localStorage and passes via `setAuthTokenGetter` in App.tsx
 - Mobile app sets API base URL from `EXPO_PUBLIC_DOMAIN` env var
 - Bet types supported: jantri, open, crossing, no-to-no, single, jodi, panna
-- Markets are seeded with 11 standard Satta Matka markets (DISAWAR, STAR DAY, etc.)
+- Markets are seeded with 5 standard Satta Matka markets (Milan Day, Kalyan, Milan Night, Rajdhani Day, Rajdhani Night)
+- Run `psql "$DATABASE_URL" -f scripts/create-schema.sql` to recreate all tables from scratch
+- Run `node scripts/seed-demo-data.mjs` (from api-server directory) to add demo data
 
 ## Product
 

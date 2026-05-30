@@ -30,14 +30,6 @@ export default function Login() {
     }
 
     try {
-      // Mocked hardcoded check for the test credentials
-      if (username === "ourempire" && password === "Ourempire@#000#@") {
-        setAdminToken("mock-jwt-token-for-admin");
-        toast({ title: "Welcome to Our Empire", description: "Login successful" });
-        setLocation("/dashboard");
-        return;
-      }
-      
       const res = await loginMutation.mutateAsync({ data: { username, password } });
       setAdminToken(res.token);
       toast({ title: "Welcome to Our Empire", description: "Login successful" });

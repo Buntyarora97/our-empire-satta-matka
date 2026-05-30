@@ -1,2 +1,4 @@
 - [Our Empire DB setup](our-empire-db.md) — DB tables created via raw SQL, not drizzle push; schema/index.ts intentionally empty
 - [Our Empire auth](our-empire-auth.md) — admin token in localStorage "adminToken"; user token in AsyncStorage "ourempire_token"; setAuthTokenGetter called in App.tsx
+- [Our Empire APK fixes](our-empire-apk-fixes.md) — newArchEnabled must be false; play.tsx uses m.status not m.isActive; results use openNumber/jodiNumber/closeNumber
+- [Our Empire workflow setup](our-empire-workflow.md) — API server runs with "PORT=8080 pnpm --filter @workspace/api-server run dev"; admin panel must be built separately with PORT=5173 BASE_PATH=/ before API server serves it

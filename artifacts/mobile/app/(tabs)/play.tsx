@@ -23,7 +23,7 @@ export default function PlayScreen() {
   const topPad = Platform.OS === "web" ? 67 : insets.top;
 
   const openMarkets = (data?.markets ?? []).filter((m) => {
-    if (!m.isActive) return false;
+    if (m.status !== "active") return false;
     const now = new Date();
     const todayDate = now.toISOString().split("T")[0];
     const closeDt = new Date(`${todayDate}T${m.closeTime}`);

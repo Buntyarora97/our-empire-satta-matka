@@ -83,7 +83,7 @@ export default function HomeScreen() {
               <View key={r.id} style={s.resultChip}>
                 <Text style={s.resultMarket} numberOfLines={1}>{r.marketName ?? "Market"}</Text>
                 <Text style={s.resultNum}>
-                  {r.openResult ?? "*"}-{r.jodiResult ?? "**"}-{r.closeResult ?? "*"}
+                  {r.openNumber ?? "*"}-{r.jodiNumber ?? "**"}-{r.closeNumber ?? "*"}
                 </Text>
               </View>
             ))}
