@@ -1,18 +1,28 @@
 /**
  * Demo data seed script for Our Empire - Satta Matka
- * Run: node scripts/seed-demo-data.mjs
+ * Run from workspace root: node scripts/seed-demo-data.mjs
  *
  * Creates:
- *  - 1 admin user  (username: admin, password: Admin@123)
+ *  - 2 admin users  (admin/Admin@123  and  ourempire/Ourempire@#000#@)
  *  - 5 markets
  *  - 1 UPI account
  *  - Default app settings
- *  - 3 demo users
+ *  - 3 demo users  (password: Test@1234)
  */
 
-import pg from "pg";
-import bcrypt from "bcrypt";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import path from "path";
 
+// Resolve pg and bcrypt from api-server's node_modules so this script
+// works when run from the workspace root (where pg is NOT installed).
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(
+  path.join(__dirname, "../artifacts/api-server/package.json")
+);
+
+const pg = require("pg");
+const bcrypt = require("bcrypt");
 const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
@@ -27,7 +37,7 @@ async function run() {
   try {
     console.log("🌱 Starting seed...\n");
 
-    // ── Admin user ──────────────────────────────────────────────────────────
+    // ── Admin users ──────────────────────────────────────────────────────────
     const adminHash = await bcrypt.hash("Admin@123", 10);
     await client.query(
       `INSERT INTO admin_users (username, password_hash, role)
@@ -37,7 +47,6 @@ async function run() {
     );
     console.log("✅  Admin user   → username: admin | password: Admin@123");
 
-    // Also add the legacy hardcoded credentials used by the admin-panel mock check
     const empireHash = await bcrypt.hash("Ourempire@#000#@", 10);
     await client.query(
       `INSERT INTO admin_users (username, password_hash, role)
@@ -96,12 +105,12 @@ async function run() {
     }
     console.log("✅  App settings seeded");
 
-    // ── Demo users ──────────────────────────────────────────────────────────
+    // ── Demo users ────────────────────────────────────────────────────────────
     const userHash = await bcrypt.hash("Test@1234", 10);
     const demoUsers = [
-      { name: "Rahul Sharma",  phone: "9876543210", balance: 5000 },
-      { name: "Priya Singh",   phone: "9812345678", balance: 2500 },
-      { name: "Amit Kumar",    phone: "9898989898", balance: 1000 },
+      { name: "Rahul Sharma", phone: "9876543210", balance: 5000 },
+      { name: "Priya Singh",  phone: "9812345678", balance: 2500 },
+      { name: "Amit Kumar",   phone: "9898989898", balance: 1000 },
     ];
 
     for (const u of demoUsers) {
@@ -118,12 +127,11 @@ async function run() {
     console.log("\n✨  Seed complete!\n");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     console.log("Admin Panel Login:");
-    console.log("  username : admin");
-    console.log("  password : Admin@123");
+    console.log("  username : admin       password : Admin@123");
+    console.log("  username : ourempire   password : Ourempire@#000#@");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("Demo App Login (any of these):");
-    console.log("  phone    : 9876543210");
-    console.log("  password : Test@1234");
+    console.log("Demo App Login:");
+    console.log("  phone    : 9876543210  password : Test@1234");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   } catch (err) {
     console.error("❌  Seed failed:", err.message);
