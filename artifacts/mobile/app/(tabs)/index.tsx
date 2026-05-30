@@ -55,7 +55,7 @@ export default function HomeScreen() {
       <View style={[s.header, { paddingTop: topPad + 16 }]}>
         <View>
           <Text style={s.greeting}>Jai Matka 🎯</Text>
-          <Text style={s.userName}>{user?.name ?? "Player"}</Text>
+          <Text style={s.userName}>{user?.fullName ?? "Player"}</Text>
         </View>
         <Pressable onPress={() => router.push("/notifications")} style={s.notifBtn}>
           <Feather name="bell" size={22} color={colors.text} />

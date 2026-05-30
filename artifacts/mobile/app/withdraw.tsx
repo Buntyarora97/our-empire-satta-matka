@@ -50,7 +50,7 @@ export default function WithdrawScreen() {
     }
     try {
       await withdraw.mutateAsync({
-        data: { amount: amt, upiId: upiId.trim() },
+        data: { amount: amt, method: "upi", upiId: upiId.trim() },
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       refreshBalance();

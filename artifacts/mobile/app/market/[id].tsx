@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { usePlaceBet, useGetMarket } from "@workspace/api-client-react";
+import { useGetMarket } from "@workspace/api-client-react";
 import { useAuth } from "@/context/AuthContext";
 import { useColors } from "@/hooks/useColors";
 
@@ -32,15 +32,15 @@ export default function MarketDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { refreshBalance } = useAuth();
+  const { refreshBalance, token } = useAuth();
 
   const { data: market, isLoading } = useGetMarket(id ?? "");
-  const placeBet = usePlaceBet();
 
   const [betType, setBetType] = useState("single");
   const [number, setNumber] = useState("");
   const [amount, setAmount] = useState("");
   const [session, setSession] = useState<"open" | "close">("open");
+  const [placing, setPlacing] = useState(false);
 
   const maxLen = BET_TYPES.find((b) => b.key === betType)?.maxLen ?? 1;
 
@@ -55,16 +55,25 @@ export default function MarketDetailScreen() {
       return;
     }
 
+    setPlacing(true);
     try {
-      await placeBet.mutateAsync({
-        data: {
-          marketId: id ?? "",
-          betType,
-          number: number.trim(),
-          amount: amt,
-          session,
-        },
-      });
+      const res = await fetch(
+        `https://${process.env.EXPO_PUBLIC_DOMAIN}/api/bets/place`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            marketId: id ?? "",
+            gameType: betType,
+            numbers: [{ number: number.trim(), amount: amt, session }],
+          }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to place bet");
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       refreshBalance();
       setNumber("");
@@ -77,6 +86,8 @@ export default function MarketDetailScreen() {
       const msg = e instanceof Error ? e.message : "Failed to place bet";
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert("Error", msg);
+    } finally {
+      setPlacing(false);
     }
   }
 
@@ -204,10 +215,10 @@ export default function MarketDetailScreen() {
         <Pressable
           style={({ pressed }) => [s.placeBetBtn, pressed && { opacity: 0.85 }]}
           onPress={handlePlaceBet}
-          disabled={placeBet.isPending}
+          disabled={placing}
           testID="btn-place-bet"
         >
-          {placeBet.isPending ? (
+          {placing ? (
             <ActivityIndicator color="#fff" />
           ) : (
             <>

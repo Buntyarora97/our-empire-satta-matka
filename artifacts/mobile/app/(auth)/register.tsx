@@ -45,7 +45,7 @@ export default function RegisterScreen() {
     setLoading(true);
     try {
       const body: Record<string, string> = {
-        name: name.trim(),
+        fullName: name.trim(),
         phone: phone.trim(),
         password,
       };

@@ -11,7 +11,7 @@ if (process.env.EXPO_PUBLIC_DOMAIN) {
 
 interface User {
   id: string;
-  name: string;
+  fullName: string;
   phone: string;
   balance: number;
   status: string;

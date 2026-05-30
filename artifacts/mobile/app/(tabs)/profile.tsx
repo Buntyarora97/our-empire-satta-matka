@@ -72,10 +72,10 @@ export default function ProfileScreen() {
     >
       <View style={s.profileCard}>
         <View style={s.avatar}>
-          <Text style={s.avatarText}>{(user?.name ?? "U")[0].toUpperCase()}</Text>
+          <Text style={s.avatarText}>{(user?.fullName ?? "U")[0].toUpperCase()}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={s.userName}>{user?.name ?? "User"}</Text>
+          <Text style={s.userName}>{user?.fullName ?? "User"}</Text>
           <Text style={s.userPhone}>{user?.phone ?? ""}</Text>
         </View>
         <View style={s.balBadge}>

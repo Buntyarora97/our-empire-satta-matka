@@ -58,8 +58,7 @@ export default function AddMoneyScreen() {
       await addMoney.mutateAsync({
         data: {
           amount: amt,
-          upiRef: utrRef.trim(),
-          upiId: upiData?.upiId ?? "",
+          utrNumber: utrRef.trim(),
         },
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
