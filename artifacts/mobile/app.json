@@ -17,7 +17,9 @@
       "supportsTablet": false
     },
     "android": {
-      "backgroundColor": "#0a0a0a"
+      "backgroundColor": "#0a0a0a",
+      "package": "com.ourempire.sattamatka",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/icon.png",
